@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCHE2694 · Mapping Ecosystems Workshop — Part 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1a18;
+  --paper: #f5f2ec;
+  --warm: #e8e3d9;
+  --accent: #c45a2d;
+  --accent-light: #f0d5c5;
+  --accent-dark: #9e3a14;
+  --slate: #5a5750;
+  --muted: #8a857b;
+  --teal: #2a6e6e;
+  --teal-light: #d4eaea;
+  --border: #d5d0c6;
+  --serif: 'Instrument Serif', Georgia, serif;
+  --sans: 'DM Sans', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 17px; scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.7;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ── */
+.topnav {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--paper);
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  backdrop-filter: blur(12px);
+}
+.topnav-left { display: flex; align-items: center; gap: 0.75rem; }
+.topnav-code {
+  font-family: var(--mono); font-size: 0.7rem;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+}
+.topnav-title { font-family: var(--serif); font-size: 1rem; color: var(--ink); }
+.topnav-right { display: flex; gap: 1.5rem; align-items: center; }
+.topnav-right a {
+  font-size: 0.8rem; color: var(--slate); text-decoration: none;
+  font-weight: 500; letter-spacing: 0.02em; transition: color 0.2s;
+}
+.topnav-right a:hover { color: var(--accent); }
+.topnav-right .active { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 2px; }
+
+/* ── HERO ── */
+.hero { padding: 5rem 2rem 4rem; max-width: 860px; margin: 0 auto; }
+.hero-label {
+  font-family: var(--mono); font-size: 0.65rem;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent);
+  margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;
+}
+.hero-label::before { content: ''; width: 1.5rem; height: 2px; background: var(--accent); }
+.hero h1 {
+  font-family: var(--serif); font-size: 3.2rem; line-height: 1.15;
+  font-weight: 400; margin-bottom: 1.5rem; max-width: 700px;
+}
+.hero h1 em { font-style: italic; color: var(--accent-dark); }
+.hero-subtitle {
+  font-size: 1.05rem; color: var(--slate); max-width: 580px; line-height: 1.75;
+}
+
+/* ── SESSION TRACKER ── */
+.tracker { max-width: 860px; margin: 0 auto 3rem; padding: 0 2rem; }
+.tracker-bar {
+  display: flex; border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden; background: #fff;
+}
+.tracker-session { flex: 1; padding: 1.25rem 1.5rem; position: relative; }
+.tracker-session + .tracker-session { border-left: 1px solid var(--border); }
+.tracker-session.current {
+  background: var(--accent-light); border-left-color: var(--accent-light);
+}
+.tracker-session.current::before {
+  content: 'You are here'; font-family: var(--mono); font-size: 0.55rem;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);
+  display: block; margin-bottom: 0.5rem;
+}
+.tracker-session.done { opacity: 0.55; }
+.tracker-session.done::before {
+  content: '✓ Complete'; font-family: var(--mono); font-size: 0.55rem;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal);
+  display: block; margin-bottom: 0.5rem;
+}
+.tracker-num { font-family: var(--serif); font-size: 1.1rem; margin-bottom: 0.25rem; }
+.tracker-desc { font-size: 0.78rem; color: var(--slate); line-height: 1.6; }
+
+/* ── CONTENT ── */
+.content { max-width: 860px; margin: 0 auto; padding: 0 2rem 4rem; }
+section { margin-bottom: 4rem; }
+.section-label {
+  font-family: var(--mono); font-size: 0.6rem;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+  margin-bottom: 0.75rem;
+}
+section h2 {
+  font-family: var(--serif); font-size: 2rem; font-weight: 400;
+  line-height: 1.25; margin-bottom: 1.25rem;
+}
+section h3 {
+  font-family: var(--serif); font-size: 1.35rem; font-weight: 400;
+  line-height: 1.3; margin-bottom: 1rem; margin-top: 2rem;
+}
+p { margin-bottom: 1rem; color: var(--ink); }
+
+/* ── DISCUSSION ── */
+.discussion {
+  border-left: 3px solid var(--teal); background: var(--teal-light);
+  padding: 1.5rem 1.75rem; border-radius: 0 8px 8px 0; margin: 2rem 0;
+}
+.discussion-label {
+  font-family: var(--mono); font-size: 0.55rem;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal);
+  margin-bottom: 0.5rem;
+}
+.discussion p {
+  font-family: var(--serif); font-size: 1.05rem;
+  font-style: italic; color: var(--ink); margin: 0; line-height: 1.6;
+}
+
+/* ── ACTIVITY BOX ── */
+.activity {
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 2rem 0;
+}
+.activity-header {
+  background: var(--accent);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.activity-title {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  padding: 1.25rem 1.5rem 0.25rem;
+}
+.activity-steps {
+  padding: 0.5rem 1.5rem 1.5rem;
+  list-style: none;
+  counter-reset: step;
+}
+.activity-steps li {
+  counter-increment: step;
+  padding: 0.6rem 0 0.6rem 2.5rem;
+  position: relative;
+  font-size: 0.9rem;
+  color: var(--slate);
+  border-bottom: 1px solid var(--border);
+}
+.activity-steps li:last-child { border-bottom: none; }
+.activity-steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  color: var(--accent);
+  top: 0.5rem;
+}
+
+/* ── SPEED ROUND ── */
+.speed-round {
+  background: var(--accent-light);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 2rem 0;
+}
+.speed-round-label {
+  font-family: var(--mono); font-size: 0.55rem;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-dark);
+  margin-bottom: 0.4rem;
+}
+.speed-round p {
+  font-size: 0.9rem; color: var(--ink); margin: 0;
+}
+
+/* ── 4M TABLE ── */
+.framework-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.framework-table thead {
+  background: var(--ink);
+  color: var(--paper);
+}
+.framework-table th {
+  font-family: var(--mono); font-size: 0.58rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.9rem 1rem; text-align: left; font-weight: 500;
+}
+.framework-table td {
+  padding: 1rem;
+  font-size: 0.85rem;
+  color: var(--slate);
+  border-bottom: 1px solid var(--border);
+  background: #fff;
+  vertical-align: top;
+  line-height: 1.55;
+}
+.framework-table tr:last-child td { border-bottom: none; }
+.stage-num {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 0.15rem;
+}
+.stage-name {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--ink);
+}
+
+/* ── NESTED CIRCLES DIAGRAM ── */
+.circles-figure {
+  margin: 2.5rem auto;
+  max-width: 480px;
+  position: relative;
+}
+.circles-figure svg {
+  width: 100%;
+  height: auto;
+}
+
+/* ── THREE-COLUMN CALLOUT ── */
+.tri-callout {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 2rem 0;
+}
+.tri-item {
+  background: #fff;
+  padding: 1.5rem;
+}
+.tri-heading {
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  color: var(--accent-dark);
+  margin-bottom: 0.5rem;
+}
+.tri-item p {
+  font-size: 0.85rem;
+  color: var(--slate);
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ── PROVOCATIONS ── */
+.provocations {
+  background: var(--warm);
+  border-radius: 8px;
+  padding: 1.75rem;
+  margin: 2rem 0;
+}
+.provocations p {
+  font-family: var(--serif);
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--ink);
+  margin: 0 0 0.5rem;
+  line-height: 1.6;
+}
+.provocations p:last-child { margin-bottom: 0; }
+
+/* ── GROUP CRITIQUE ── */
+.critique-box {
+  border: 1px solid var(--teal);
+  border-radius: 8px;
+  padding: 1.75rem;
+  margin: 2rem 0;
+  background: var(--teal-light);
+}
+.critique-box .discussion-label { margin-bottom: 0.75rem; }
+.critique-box p {
+  font-size: 0.92rem;
+  color: var(--ink);
+  margin: 0;
+  line-height: 1.65;
+}
+
+/* ── FOOTER ── */
+.session-footer {
+  max-width: 860px; margin: 0 auto; padding: 2rem;
+  display: flex; justify-content: flex-start;
+}
+.prev-link {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-family: var(--sans); font-size: 0.85rem; font-weight: 500;
+  color: var(--slate); background: #fff; border: 1px solid var(--border);
+  padding: 0.75rem 1.5rem; border-radius: 6px; text-decoration: none;
+  transition: all 0.2s;
+}
+.prev-link:hover { border-color: var(--accent); color: var(--accent); }
+.prev-link svg { width: 16px; height: 16px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 700px) {
+  .hero h1 { font-size: 2.2rem; }
+  .tri-callout { grid-template-columns: 1fr; }
+  .tracker-bar { flex-direction: column; }
+  .tracker-session + .tracker-session { border-left: none; border-top: 1px solid var(--border); }
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero h1, .hero-subtitle, section { animation: fadeUp 0.6s ease-out both; }
+.hero-subtitle { animation-delay: 0.1s; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <div class="topnav-left">
+    <span class="topnav-code">TCHE2694</span>
+    <span class="topnav-title">Mapping Ecosystems Workshop</span>
+  </div>
+  <div class="topnav-right">
+    <a href="part-1.html">Part 1</a>
+    <a href="part-2.html" class="active">Part 2</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-label">Part 2 · Practice</div>
+  <h1>From vocabulary<br>to <em>analysis</em></h1>
+  <p class="hero-subtitle">In Part 1 you explored why mapping is a natural capacity and what shared visual vocabulary makes possible. Now the question shifts: how do you build maps that reveal complexity across different scales — and where do data and analytical frameworks fit?</p>
+</header>
+
+<!-- TRACKER -->
+<div class="tracker">
+  <div class="tracker-bar">
+    <div class="tracker-session done">
+      <div class="tracker-num">Part 1 — Concepts: Why Map?</div>
+      <div class="tracker-desc">Mapping as cognition · What maps do for groups · Visual vocabulary · Reflection</div>
+    </div>
+    <div class="tracker-session current">
+      <div class="tracker-num">Part 2 — Practice: How to Map</div>
+      <div class="tracker-desc">4M framework · Nested circles · Data &amp; AI tools · Group critique</div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- WARM-UP -->
+  <section>
+    <div class="section-label">Warm-up</div>
+    <h2>Start with the back of a napkin</h2>
+    <p>Before layering in complexity, begin simply. A rough sketch forces you to commit to what matters most — which relationships, which actors, which tensions. Complexity comes after, not before, that core clarity.</p>
+
+    <div class="activity">
+      <div class="activity-header">Activity</div>
+      <div class="activity-title">"Back of Napkin" Mapping</div>
+      <ol class="activity-steps">
+        <li>Quickly sketch your workplace, project, or community as a rough map. Give yourself 3 minutes. No rules on what to draw.</li>
+        <li>Circle the element that feels most central to the problem you are working on.</li>
+        <li>Draw one line outward from it to something that helps it — and one line to something that creates friction.</li>
+        <li>What question comes to mind? Is it shared with your group, a personal curiosity, or a representational challenge?</li>
+      </ol>
+    </div>
+
+    <div class="speed-round">
+      <div class="speed-round-label">Speed round</div>
+      <p>Share your draft ecosystems in the chat. What is the central question your map raises?</p>
+    </div>
+  </section>
+
+  <!-- 4M FRAMEWORK -->
+  <section>
+    <div class="section-label">Core framework</div>
+    <h2>Multilevel analysis: the 4M framework</h2>
+    <p>No matter where you are in your process, your analysis benefits from thinking across levels. The 4M framework describes four scales of activity — from top-down programmatic structures to granular observations that revise our understanding of how abstract processes actually work.</p>
+    <p>Each level involves a different cognitive goal and calls for a different visual approach. Use the table below to identify where your group currently sits — and which level you need to move toward next.</p>
+
+    <table class="framework-table">
+      <thead>
+        <tr>
+          <th style="width: 22%">Development Stage</th>
+          <th style="width: 26%">Cognitive Goal</th>
+          <th style="width: 28%">Visual Tool</th>
+          <th style="width: 24%">Analytic Outcome</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="stage-num">1</span><span class="stage-name">Resource Mapping</span></td>
+          <td><strong>Offload</strong> — clear working memory of details.</td>
+          <td>Nodes &amp; Clusters: grouping related items.</td>
+          <td>Identifying what exists vs. what is missing.</td>
+        </tr>
+        <tr>
+          <td><span class="stage-num">2</span><span class="stage-name">Lines of Activity</span></td>
+          <td><strong>Simulation</strong> — replaying or imagining workflows.</td>
+          <td>Vectors / Arrows: showing flow and dependency.</td>
+          <td>Identifying efficiency (speed, friction, loops).</td>
+        </tr>
+        <tr>
+          <td><span class="stage-num">3</span><span class="stage-name">Visualizing Value</span></td>
+          <td><strong>Evaluation</strong> — looking for evidence of benefits beyond intention.</td>
+          <td>Line strength / Stars: indicating durable relationships and realized value.</td>
+          <td>Identifying evidence of reciprocity.</td>
+        </tr>
+        <tr>
+          <td><span class="stage-num">4</span><span class="stage-name">Scale Modification</span></td>
+          <td><strong>Synthesis</strong> — connecting macro to micro.</td>
+          <td>Concentric Layers: showing hierarchy and tensions.</td>
+          <td>Identifying causality (why the local friction exists).</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="discussion">
+      <div class="discussion-label">Discussion</div>
+      <p>How do you know when you have shifted to a different level of analysis? What signals — in the map or in the conversation around it — tell you it is time to move up or down a scale?</p>
+    </div>
+  </section>
+
+  <!-- NESTED CIRCLES -->
+  <section>
+    <div class="section-label">Technique deep-dive</div>
+    <h2>Circles in circles: multilevel time and relationship</h2>
+    <p>Concentric rings represent hierarchy, time cycles, and relationship dependencies simultaneously. The outermost ring typically holds macro forces — policy, culture, sector conditions. Each inner ring gets more local, more immediate, more within reach.</p>
+    <p>Tensions appear at the borders between rings: the places where macro forces press down on local practice, or where local observations challenge our assumptions about how the larger system works.</p>
+
+    <div class="circles-figure">
+      <svg viewBox="0 0 480 400" xmlns="http://www.w3.org/2000/svg">
+        <!-- Outer ring -->
+        <circle cx="240" cy="200" r="180" fill="none" stroke="#d5d0c6" stroke-width="1.5" stroke-dasharray="6 4"/>
+        <text x="240" y="38" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="9" fill="#8a857b" letter-spacing="1.5" text-transform="uppercase">MACRO — POLICY · CULTURE · SECTOR</text>
+        
+        <!-- Middle ring -->
+        <circle cx="240" cy="200" r="125" fill="none" stroke="#c45a2d" stroke-width="1.5" opacity="0.5"/>
+        <text x="240" y="92" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="9" fill="#c45a2d" letter-spacing="1.2">MESO — ORGANISATION · PROGRAM</text>
+
+        <!-- Inner ring -->
+        <circle cx="240" cy="200" r="70" fill="#f0d5c5" fill-opacity="0.4" stroke="#c45a2d" stroke-width="1.5"/>
+        <text x="240" y="152" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="9" fill="#9e3a14" letter-spacing="1.2">MICRO — PRACTICE</text>
+
+        <!-- Core -->
+        <circle cx="240" cy="210" r="18" fill="#c45a2d"/>
+        <text x="240" y="215" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="9" fill="#fff" font-weight="600">You</text>
+
+        <!-- Tension arrows -->
+        <line x1="240" y1="140" x2="240" y2="125" stroke="#9e3a14" stroke-width="1" marker-end="url(#arrowDown)"/>
+        <line x1="240" y1="275" x2="240" y2="260" stroke="#9e3a14" stroke-width="1" marker-end="url(#arrowUp)"/>
+        
+        <!-- Tension labels -->
+        <text x="340" y="168" font-family="'Instrument Serif', serif" font-size="11" fill="#5a5750" font-style="italic">tension ↕</text>
+        <text x="340" y="260" font-family="'Instrument Serif', serif" font-size="11" fill="#5a5750" font-style="italic">tension ↕</text>
+
+        <!-- Scale label -->
+        <line x1="60" y1="50" x2="60" y2="360" stroke="#d5d0c6" stroke-width="1"/>
+        <polygon points="60,50 56,62 64,62" fill="#d5d0c6"/>
+        <polygon points="60,360 56,348 64,348" fill="#d5d0c6"/>
+        <text x="46" y="200" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="8" fill="#8a857b" letter-spacing="1" transform="rotate(-90 46 200)">SCALE</text>
+
+        <defs>
+          <marker id="arrowDown" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="#9e3a14"/></marker>
+          <marker id="arrowUp" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="#9e3a14"/></marker>
+        </defs>
+      </svg>
+    </div>
+
+    <div class="discussion">
+      <div class="discussion-label">If you want to use nested circles</div>
+      <p>What are the strengths or challenges in your group's chosen context? Which ring do your observations sit in — and which ring produces the friction you're trying to name?</p>
+    </div>
+  </section>
+
+  <!-- DATA & AI -->
+  <section>
+    <div class="section-label">Leveling up</div>
+    <h2>Integrating data and AI: help or obstacle?</h2>
+    <p>Data can sharpen your map — or it can bury the insight you are trying to surface. The key is knowing what decision the data is meant to support, and whether adding it brings more clarity than it costs in complexity.</p>
+
+    <div class="tri-callout">
+      <div class="tri-item">
+        <div class="tri-heading">Value through partnerships</div>
+        <p>Which relationships in your map are durable? Which are new? Data can help you distinguish established flows from emerging ones.</p>
+      </div>
+      <div class="tri-item">
+        <div class="tri-heading">Value through collaboration</div>
+        <p>What outcomes exceed course or program objectives? Look for evidence of reciprocity that goes beyond the intended design.</p>
+      </div>
+      <div class="tri-item">
+        <div class="tri-heading">Blocked value</div>
+        <p>Where are tensions or open contradictions preventing value from flowing? Data can make invisible friction visible.</p>
+      </div>
+    </div>
+
+    <div class="provocations">
+      <p>What can you do? What can you do with others? What can you do with resources?</p>
+      <p>Would data help clarify your picture — or complicate it?</p>
+      <p>Where does AI assist your mapping process, and where does it hobble your own reasoning?</p>
+    </div>
+  </section>
+
+  <!-- GROUP CRITIQUE -->
+  <section>
+    <div class="section-label">Closing</div>
+    <h2>Group critique</h2>
+    <p>After this session, use your smaller groups to test your map in discussion. The purpose is not polish — it is whether the map generates the conversation you intended.</p>
+
+    <div class="critique-box">
+      <div class="discussion-label">Guiding questions</div>
+      <p>Does the map prompt the conversation you intended? What would you add, remove, or shift to make it more generative? Where does the map surprise someone who wasn't involved in making it?</p>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<div class="session-footer">
+  <a href="part-1.html" class="prev-link">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M13 8H3M7 4l-4 4 4 4"/></svg>
+    Back to Part 1
+  </a>
+</div>
+
+</body>
+</html>
